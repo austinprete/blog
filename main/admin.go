@@ -36,6 +36,21 @@ func adminHandler(w http.ResponseWriter, r *http.Request) {
 	t.ExecuteTemplate(w, "base", postDataAry)
 }
 
+func postHandler(w http.ResponseWriter, r *http.Request) {
+	c := appengine.NewContext(r)
+	//u := user.Current(c)
+	post := &Post{
+		Title:   r.FormValue("title"),
+		Content: r.FormValue("content"),
+		Date:    time.Now(),
+		Author:  "Austin Prete", // u.String() if you'd like to access from logged in user
+	}
+	key := datastore.NewIncompleteKey(c, "Post", nil)
+	datastore.Put(c, key, post)
+	time.Sleep(100 * time.Millisecond)
+	http.Redirect(w, r, "/admin", http.StatusFound)
+}
+
 func adminEditPostHandler(w http.ResponseWriter, r *http.Request) {
 	postURL := r.URL
 	postString := postURL.Query().Get("p")
@@ -67,6 +82,17 @@ func submitEditHandler(w http.ResponseWriter, r *http.Request) {
 	post.Title = r.FormValue("title")
 	post.Content = r.FormValue("content")
 	datastore.Put(c, key, &post)
+	time.Sleep(100 * time.Millisecond)
+	http.Redirect(w, r, "/admin", http.StatusFound)
+}
+
+func removePostHandler(w http.ResponseWriter, r *http.Request) {
+	c := appengine.NewContext(r)
+	postURL := r.URL
+	postString := postURL.Query().Get("p")
+	postNum, _ := strconv.ParseInt(postString, 10, 64)
+	key := datastore.NewKey(c, "Post", "", postNum, nil)
+	datastore.Delete(c, key)
 	time.Sleep(100 * time.Millisecond)
 	http.Redirect(w, r, "/admin", http.StatusFound)
 }

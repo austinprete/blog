@@ -44,6 +44,7 @@ func init() {
 	http.HandleFunc("/admin/post", postHandler)
 	http.HandleFunc("/admin/edit", adminEditPostHandler)
 	http.HandleFunc("/admin/edit/submit", submitEditHandler)
+	http.HandleFunc("/admin/remove", removePostHandler)
 	http.HandleFunc("/post", postViewHandler)
 }
 
@@ -60,7 +61,7 @@ func blogHandler(w http.ResponseWriter, r *http.Request) {
 			postDataAry[i].Content = postAry[i].Content[0:60] + " [...]"
 		}
 		postDataAry[i].ID = keys[i].IntID()
-		postDataAry[i].Date = postAry[i].Date.Format("Jan 2, 2006")
+		postDataAry[i].Date = postAry[i].Date.Format("Jan 2, 2006 @ 03:04 PM")
 		postDataAry[i].Author = postAry[i].Author
 		postDataAry[i].Title = postAry[i].Title
 	}
@@ -93,20 +94,6 @@ func logoutHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusFound)
 }
 
-func postHandler(w http.ResponseWriter, r *http.Request) {
-	c := appengine.NewContext(r)
-	//u := user.Current(c)
-	post := &Post{
-		Title:   r.FormValue("title"),
-		Content: r.FormValue("content"),
-		Date:    time.Now(),
-		Author:  "Austin Prete", // u.String() if you'd like to access from logged in user
-	}
-	key := datastore.NewIncompleteKey(c, "Post", nil)
-	datastore.Put(c, key, post)
-	http.Redirect(w, r, "/admin", http.StatusFound)
-}
-
 func postViewHandler(w http.ResponseWriter, r *http.Request) {
 	postURL := r.URL
 	postString := postURL.Query().Get("p")
@@ -117,7 +104,12 @@ func postViewHandler(w http.ResponseWriter, r *http.Request) {
 	var posts []Post
 	key, _ := qry.GetAll(c, &posts)
 	post := posts[0]
-	post.ID = key[0].IntID()
+	var postData PostData
+	postData.ID = key[0].IntID()
+	postData.Date = post.Date.Format("Jan 02, 2006 @ 03:04 PM")
+	postData.Author = post.Author
+	postData.Content = post.Content
+	postData.Title = post.Title
 	t := template.Must(template.ParseFiles("templates/post.html", "templates/base.html"))
-	t.ExecuteTemplate(w, "base", post)
+	t.ExecuteTemplate(w, "base", postData)
 }
