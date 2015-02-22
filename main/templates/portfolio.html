@@ -1,0 +1,88 @@
+{{ define "title" }}Portfolio{{ end }} {{ define "image" }}/static/images/sweden2.jpg{{ end }} {{ define "links" }}
+<li class=""><a href="/">Blog</a>
+</li>
+<li class=""><a href="/about">About</a>
+</li>
+<li class="active"><a href="/portfolio">Portfolio</a>
+</li>
+{{ end }} {{ define "content" }}
+<!-- Main jumbotron for a primary marketing message or call to action -->
+<div class="jumbotron" style="background-color: #444">
+    <h1 style=" font-family: 'Open Sans Condensed'; color:orange; font-size:65px; word-break: break-all;">Portfolio <i class="fa fa-code"></i>
+    </h1>
+
+    <p style="color:white">Code written in everything from Python to Haskell to C# to Go</p>
+</div>
+
+<div class="row">
+    <div class="container-fluid col-md-6 ">
+        <div class="container-fluid card " style="background-color: #444 ">
+            <h1 class="page-header "><a href="https://github.com/austinprete " style="color:white ">Github <i class="fa fa-github "></i></a>
+            </h1>
+            <div class="container-fluid card " style="background-color: #333 ">
+                <h1 class="page-header " style="font-family: Grand Hotel, cursive; color:white ">
+                    Express Yourself
+                </h1>
+                <p style="color:white">
+                    Python
+                </p>
+                <a href="https://github.com/austinprete/expressyourself " style="font-size: 18px; color:#ddd; word-break: break-all"><i class="fa fa-code "></i> https://github.com/austinprete/expressyourself</a>
+                <p style="color:white">
+                    A chat service that ties into the Google Translate API.
+                </p>
+                <h1 class="page-header " style="font-family: Grand Hotel, cursive; color:white ">
+                    Teacher Clash
+                </h1>
+                <p style="color:white">
+                    Python
+                </p>
+                <a href="https://github.com/austinprete/teacher-clash " style="font-size: 18px; color:#ddd; word-break: break-all"><i class="fa fa-code "></i> https://github.com/austinprete/teacher-clash</a>
+                <p style="color:white">
+                    A simple web application based on the idea of Mark Zuckerburg's FaceMash app, but using the algorithm to rank teachers from my high school instead.
+                </p>
+                <h1 class="page-header " style="font-family: Grand Hotel, cursive; color:white">
+                    Project Euler
+                </h1>
+                <p style="color:white">
+                    Haskell
+                </p>
+                <a href="https://github.com/austinprete/project_euler " style="font-size: 18px; color:#ddd; word-break: break-all"><i class="fa fa-code "></i> https://github.com/austinprete/project_euler</a>
+                <p style="color:white">
+                    Solutions to some of the Project Euler problems (projecteuler.net) solved functionally in Haskell.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid col-md-6">
+        <div class="container-fluid card " style="background-color: #444 ">
+            <h1 class="page-header "><a href="https://bitbucket.org/austinprete " style="color:white; font-size: 45px">Bitbucket <i class="fa fa-bitbucket "></i></a>
+            </h1>
+            <div class="container-fluid card " style="background-color: #333 ">
+                <h1 class="page-header " style="font-family: Grand Hotel, cursive; color:white ">
+                    MoodGraph
+                </h1>
+                <p style="color:white">
+                    Python
+                </p>
+                <a href="https://moodgraph.net/beta " style="font-size: 18px; color:#ddd; word-break: break-all"><i class="fa fa-globe "></i> http://moodgraph.net/beta</a>
+                <br/>
+                <a href="https://bitbucket.org/austinprete/moodgraph " style="font-size: 18px; color:#ddd; word-break: break-all "><i class="fa fa-code "></i> https://bitbucket.org/austinprete/moodgraph</a>
+                <p style="color:white">
+                    A word in progress web application that serves as both a mood tracking application and a platform for connecting patients to their mental health professionals.
+                </p>
+                <h1 class="page-header " style="font-family: Grand Hotel, cursive; color:white ">
+                    Text Analysis
+                </h1>
+                <p style="color:white">
+                    C#
+                </p>
+                <a href="https://bitbucket.org/austinprete/textanalysis " style="font-size: 18px; color:#ddd; word-break: break-all"><i class="fa fa-code "></i> https://bitbucket.org/austinprete/textanalysis</a>
+                <p style="color:white">
+                    An incomplete console program that analyzes samples of authors and tries to predict authorship of unknown texts.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{{ end }}

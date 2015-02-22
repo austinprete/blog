@@ -1,0 +1,20 @@
+{{ define "title" }}Admin{{ end }} {{ define "image" }}/static/images/sweden1.jpg{{ end }} {{ define "links" }}
+<li class="active"><a href="/">Blog</a>
+</li>
+<li class=""><a href="/about">About</a>
+</li>
+<li class=""><a href="/portfolio">Portfolio</a>
+</li>
+{{ end }} {{ define "content" }}
+<div class="container-fluid card">
+    <h2>Edit Post</h2>
+    <form action="/admin/edit/submit?p={{ .ID }}" method="post" class="form-group">
+        <h4>Title: </h4>
+        <input type="text" class="form-control" value="{{ .Title }}" name="title" />
+        <h4>Content: </h4>
+        <textarea type="text" class="form-control" name="content">{{ .Content }}</textarea>
+        </br>
+        <button type="submit" class="btn btn-warning">SUBMIT</button>
+    </form>
+</div>
+{{ end }}

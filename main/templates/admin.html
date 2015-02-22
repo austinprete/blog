@@ -1,0 +1,71 @@
+{{ define "title" }}Admin{{ end }} {{ define "image" }}/static/images/sweden1.jpg{{ end }} {{ define "links" }}
+<li class="active"><a href="/">Blog</a>
+</li>
+<li class=""><a href="/about">About</a>
+</li>
+<li class=""><a href="/portfolio">Portfolio</a>
+</li>
+{{ end }} {{ define "content" }}
+<div class="container-fluid">
+    <div class="container-fluid card">
+        <h1 class="page-header">New post</h1>
+        <form role="form" action="/admin/post" method="post">
+            <div class="form-group">
+                <input name="title" type="text" class="form-control" placeholder="TITLE" />
+                <br/>
+                <textarea name="content" class="form-control" placeholder="CONTENT..." rows="4"></textarea>
+                </br>
+                <button type="submit" class="btn btn-warning">SUBMIT</button>
+            </div>
+        </form>
+        </br>
+    </div>
+</div>
+<div class="container-fluid col-md-12">
+    <div class="container-fluid card">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Content</th>
+                        <th>Date</th>
+                        <th class="text-right">Actions</th>
+                    </tr>
+                    <tbody>
+                        {{ range . }}
+                        <tr>
+                            <td>{{ .Title }}</td>
+                            <td>{{ .Content}} </td>
+                            <td>{{ .Date }}</td>
+                            <td class="td-actions text-right">
+                                <a href="/post?p={{ .ID }}">
+                                    <button type="button" rel="tooltip" title="View Post" class="btn btn-info btn-simple btn-xs">
+
+                                        <i class="fa fa-desktop"></i>
+
+                                    </button>
+                                </a>
+                                <a href="admin/edit?p={{ .ID }}">
+                                    <button type="button" rel="tooltip" title="Edit Post" class="btn btn-success btn-simple btn-xs">
+
+                                        <i class="fa fa-edit"></i>
+
+                                    </button>
+                                </a>
+                                <a href="/admin/remove">
+                                    <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-xs">
+
+                                        <i class="fa fa-times"></i>
+
+                                    </button>
+                                </a>
+                            </td>
+                        </tr>
+                        {{ end }}
+                    </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{{ end }}

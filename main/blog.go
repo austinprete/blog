@@ -3,9 +3,7 @@ package blog
 import (
 	"fmt"
 	"html/template"
-	"io/ioutil"
 	"net/http"
-	"net/url"
 	"strconv"
 	"time"
 
@@ -23,7 +21,8 @@ type Post struct {
 	ID      int64
 }
 
-type PostContext struct {
+// PostData is the view representation of a post.
+type PostData struct {
 	Title   string
 	Content string
 	Date    string
@@ -43,58 +42,42 @@ func init() {
 	http.HandleFunc("/admin", adminHandler)
 	http.HandleFunc("/logout", logoutHandler)
 	http.HandleFunc("/admin/post", postHandler)
+	http.HandleFunc("/admin/edit", adminEditPostHandler)
+	http.HandleFunc("/admin/edit/submit", submitEditHandler)
 	http.HandleFunc("/post", postViewHandler)
 }
 
 func blogHandler(w http.ResponseWriter, r *http.Request) {
-	postURL, _ := url.Parse(r.URL.String())
-	postQuery := postURL.Query()
-	postnumber := postQuery.Get("post")
-	if postnumber == "" {
-		t, _ := template.ParseFiles("index.html")
-		c := appengine.NewContext(r)
-		qry := datastore.NewQuery("Post").Order("Date")
-		var postAry []Post
-		keys, _ := qry.GetAll(c, &postAry)
-		postContextAry := make([]PostContext, len(postAry))
-		for i := range postAry {
-			postContextAry[i].Content = postAry[i].Content
-			if len(postAry[i].Content) > 60 {
-				postContextAry[i].Content = postAry[i].Content[0:60] + " [...]"
-			}
-			postContextAry[i].ID = keys[i].IntID()
-			postContextAry[i].Date = postAry[i].Date.Format("Jan 2, 2006")
-			postContextAry[i].Author = postAry[i].Author
-			postContextAry[i].Title = postAry[i].Title
+	t := template.Must(template.ParseFiles("templates/index.html", "templates/base.html"))
+	c := appengine.NewContext(r)
+	qry := datastore.NewQuery("Post").Order("-Date")
+	var postAry []Post
+	keys, _ := qry.GetAll(c, &postAry)
+	postDataAry := make([]PostData, len(postAry))
+	for i := range postAry {
+		postDataAry[i].Content = postAry[i].Content
+		if len(postAry[i].Content) > 60 {
+			postDataAry[i].Content = postAry[i].Content[0:60] + " [...]"
 		}
-		t.Execute(w, postContextAry)
-	} else {
-		t, _ := template.ParseFiles("post.html")
-		t.Execute(w, nil)
+		postDataAry[i].ID = keys[i].IntID()
+		postDataAry[i].Date = postAry[i].Date.Format("Jan 2, 2006")
+		postDataAry[i].Author = postAry[i].Author
+		postDataAry[i].Title = postAry[i].Title
 	}
+	t.ExecuteTemplate(w, "base", postDataAry)
 }
 
 func aboutHandler(w http.ResponseWriter, r *http.Request) {
-	file, _ := ioutil.ReadFile("about.html")
-	fmt.Fprint(w, string(file))
+	t := template.Must(template.ParseFiles("templates/about.html", "templates/base.html"))
+	t.ExecuteTemplate(w, "base", nil)
 }
 
 func portfolioHandler(w http.ResponseWriter, r *http.Request) {
-	file, _ := ioutil.ReadFile("portfolio.html")
-	fmt.Fprint(w, string(file))
-}
-
-func adminHandler(w http.ResponseWriter, r *http.Request) {
-	c := appengine.NewContext(r)
-	u := user.Current(c)
-	if u == nil {
-		url, _ := user.LoginURL(c, r.URL.String())
-		w.Header().Set("Location", url)
-		w.WriteHeader(http.StatusFound)
-		return
+	t := template.Must(template.ParseFiles("templates/portfolio.html", "templates/base.html"))
+	err := t.ExecuteTemplate(w, "base", nil)
+	if err != nil {
+		fmt.Fprint(w, err)
 	}
-	t, _ := template.ParseFiles("admin.html")
-	t.Execute(w, nil)
 }
 
 func logoutHandler(w http.ResponseWriter, r *http.Request) {
@@ -112,12 +95,12 @@ func logoutHandler(w http.ResponseWriter, r *http.Request) {
 
 func postHandler(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
-	u := user.Current(c)
+	//u := user.Current(c)
 	post := &Post{
 		Title:   r.FormValue("title"),
 		Content: r.FormValue("content"),
 		Date:    time.Now(),
-		Author:  u.String(),
+		Author:  "Austin Prete", // u.String() if you'd like to access from logged in user
 	}
 	key := datastore.NewIncompleteKey(c, "Post", nil)
 	datastore.Put(c, key, post)
@@ -135,6 +118,6 @@ func postViewHandler(w http.ResponseWriter, r *http.Request) {
 	key, _ := qry.GetAll(c, &posts)
 	post := posts[0]
 	post.ID = key[0].IntID()
-	t, _ := template.ParseFiles("post.html")
-	t.Execute(w, post)
+	t := template.Must(template.ParseFiles("templates/post.html", "templates/base.html"))
+	t.ExecuteTemplate(w, "base", post)
 }

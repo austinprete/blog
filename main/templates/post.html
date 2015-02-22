@@ -1,0 +1,35 @@
+{{ define "title" }}Blog{{ end }} {{ define "image" }}static/images/sweden1.jpg{{ end }} {{ define "links" }}
+<li class="active"><a href="/">Blog</a>
+</li>
+<li class=""><a href="/about">About</a>
+</li>
+<li class=""><a href="/portfolio">Portfolio</a>
+</li>
+{{ end }} {{ define "content" }}
+<!-- Main jumbotron for a primary marketing message or call to action -->
+<div class="jumbotron" style="background-color: #444">
+    <h1 style=" font-family: 'Open Sans Condensed'; color:orange; font-size:70px">Austin Prete </h1>
+
+    <p style="color:white">A teen programmer dreaming in Python and Go</p>
+</div>
+<div class="container-fluid col-md-12">
+    <div class="container-fluid card" style="background-color: #444; color: white">
+        <div class="content">
+            <h3 class="title " style="color: white; text-decoration: underline ">
+                <a href="/post?p={{ .ID }}">{{ .Title }}</a>
+            </h3>
+            <p>
+                {{ .Content }}
+            </p>
+        </div>
+        <div class="footer ">
+            <div class="author ">
+                <span>Posted by: {{ .Author }}</span>
+            </div>
+            <div class="stats pull-right " style="color: #ccc ">
+                <span>posted on: {{ .Date }}</span>
+            </div>
+        </div>
+    </div>
+</div>
+{{ end }}
