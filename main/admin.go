@@ -9,8 +9,8 @@ import (
 	"strconv"
 	"time"
 
-	"appengine"
-	"appengine/datastore"
+	"google.golang.org/appengine"
+	"google.golang.org/appengine/datastore"
 )
 
 func adminHandler(w http.ResponseWriter, r *http.Request) {

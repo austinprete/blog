@@ -7,9 +7,9 @@ import (
 	"strconv"
 	"time"
 
-	"appengine"
-	"appengine/datastore"
-	"appengine/user"
+	"google.golang.org/appengine"
+	"google.golang.org/appengine/datastore"
+	"google.golang.org/appengine/user"
 )
 
 // Post is the datastore structure for a blog post
